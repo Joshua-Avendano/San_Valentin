@@ -123,7 +123,6 @@
         let player = { x: 50, y: 50, size: 20 };
         let hearts = [];
         let collected = 0;
-        let moving = { up: false, down: false, left: false, right: false };
 
         function createHeart() {
             return {
@@ -175,28 +174,26 @@
             });
         }
 
-        function movePlayer() {
-            if (moving.up) player.y -= 10;
-            if (moving.down) player.y += 10;
-            if (moving.left) player.x -= 10;
-            if (moving.right) player.x += 10;
+        // Mover el jugador con las flechas al hacer clic en los botones
+        document.getElementById("up").addEventListener("click", () => {
+            player.y -= 10;
             updateGame();
-        }
+        });
 
-        // Escuchar cuando se presiona y se suelta un botón
-        document.getElementById("up").addEventListener("mousedown", () => moving.up = true);
-        document.getElementById("down").addEventListener("mousedown", () => moving.down = true);
-        document.getElementById("left").addEventListener("mousedown", () => moving.left = true);
-        document.getElementById("right").addEventListener("mousedown", () => moving.right = true);
+        document.getElementById("down").addEventListener("click", () => {
+            player.y += 10;
+            updateGame();
+        });
 
-        // Detener el movimiento cuando se deja de presionar
-        document.getElementById("up").addEventListener("mouseup", () => moving.up = false);
-        document.getElementById("down").addEventListener("mouseup", () => moving.down = false);
-        document.getElementById("left").addEventListener("mouseup", () => moving.left = false);
-        document.getElementById("right").addEventListener("mouseup", () => moving.right = false);
+        document.getElementById("left").addEventListener("click", () => {
+            player.x -= 10;
+            updateGame();
+        });
 
-        // Continuar moviendo el jugador mientras se mantiene presionado
-        setInterval(movePlayer, 100);
+        document.getElementById("right").addEventListener("click", () => {
+            player.x += 10;
+            updateGame();
+        });
 
         // Mover el botón "No" cuando el cursor pase sobre él
         const noButton = document.getElementById("no");
