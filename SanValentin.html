@@ -10,9 +10,11 @@
             background-color: black;
             font-family: Arial, sans-serif;
             color: white;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
         }
-        #introCanvas, #gameCanvas {
+        canvas {
             display: block;
             margin: auto;
         }
@@ -21,26 +23,27 @@
         }
         #mensaje {
             display: none;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: #ff4d6d;
             margin-top: 20px;
         }
         .controls {
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
+            width: 100%;
             margin-top: 20px;
         }
         .control-btn {
-            width: 50px;
-            height: 50px;
-            margin: 5px;
-            font-size: 20px;
+            width: 60px;
+            height: 60px;
+            font-size: 25px;
             border: none;
             background-color: #ff4d6d;
             color: white;
             border-radius: 50%;
             cursor: pointer;
+            margin: 10px;
         }
         #yesNoButtons {
             display: none;
@@ -49,12 +52,34 @@
         .yesNo-btn {
             background-color: #ff4d6d;
             color: white;
-            font-size: 20px;
+            font-size: 18px;
             border: none;
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
             margin: 5px;
+        }
+
+        /* Estilo para la animación de la intro */
+        #introCanvas {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        /* Estilo adaptativo para el mensaje */
+        @media (max-width: 600px) {
+            #mensaje {
+                font-size: 18px;
+            }
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .yesNo-btn {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -123,6 +148,7 @@
         let player = { x: 50, y: 50, size: 20 };
         let hearts = [];
         let collected = 0;
+        let moving = { up: false, down: false, left: false, right: false };
 
         function createHeart() {
             return {
@@ -174,26 +200,28 @@
             });
         }
 
-        // Mover el jugador con las flechas al hacer clic en los botones
-        document.getElementById("up").addEventListener("click", () => {
-            player.y -= 10;
+        function movePlayer() {
+            if (moving.up) player.y -= 10;
+            if (moving.down) player.y += 10;
+            if (moving.left) player.x -= 10;
+            if (moving.right) player.x += 10;
             updateGame();
-        });
+        }
 
-        document.getElementById("down").addEventListener("click", () => {
-            player.y += 10;
-            updateGame();
-        });
+        // Escuchar cuando se presiona y se suelta un botón
+        document.getElementById("up").addEventListener("mousedown", () => moving.up = true);
+        document.getElementById("down").addEventListener("mousedown", () => moving.down = true);
+        document.getElementById("left").addEventListener("mousedown", () => moving.left = true);
+        document.getElementById("right").addEventListener("mousedown", () => moving.right = true);
 
-        document.getElementById("left").addEventListener("click", () => {
-            player.x -= 10;
-            updateGame();
-        });
+        // Detener el movimiento cuando se deja de presionar
+        document.getElementById("up").addEventListener("mouseup", () => moving.up = false);
+        document.getElementById("down").addEventListener("mouseup", () => moving.down = false);
+        document.getElementById("left").addEventListener("mouseup", () => moving.left = false);
+        document.getElementById("right").addEventListener("mouseup", () => moving.right = false);
 
-        document.getElementById("right").addEventListener("click", () => {
-            player.x += 10;
-            updateGame();
-        });
+        // Continuar moviendo el jugador mientras se mantiene presionado
+        setInterval(movePlayer, 100);
 
         // Mover el botón "No" cuando el cursor pase sobre él
         const noButton = document.getElementById("no");
