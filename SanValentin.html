@@ -45,6 +45,7 @@
         #yesNoButtons {
             display: none;
             margin-top: 20px;
+            position: relative; /* Permite ajustar la posición */
         }
         .yesNo-btn {
             background-color: #ff4d6d;
@@ -54,7 +55,27 @@
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
-            margin: 5px;
+            margin: 10px;
+        }
+
+        /* Ajustes para dispositivos móviles */
+        @media (max-width: 600px) {
+            .yesNo-btn {
+                font-size: 18px;
+                padding: 8px 16px;
+            }
+
+            #yesNoButtons {
+                margin-top: 30px; /* Subir los botones en pantallas pequeñas */
+            }
+
+            #mensaje {
+                font-size: 20px; /* Reducir tamaño de mensaje */
+            }
+
+            .controls {
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
