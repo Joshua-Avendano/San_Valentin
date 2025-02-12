@@ -10,14 +10,17 @@
             background-color: black;
             font-family: Arial, sans-serif;
             color: white;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
         }
-        #introCanvas, #gameCanvas {
-            display: block;
-            margin: auto;
+        canvas {
+            width: 100%;
+            height: auto;
         }
         #gameContainer {
-            display: none;
+            display: block;
+            margin: auto;
         }
         #mensaje {
             display: none;
@@ -32,10 +35,10 @@
             margin-top: 20px;
         }
         .control-btn {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             margin: 5px;
-            font-size: 20px;
+            font-size: 30px;
             border: none;
             background-color: #ff4d6d;
             color: white;
@@ -64,7 +67,7 @@
     <div id="gameContainer">
         <h1>¡Recolecta 5 corazones para desbloquear el mensaje! 💖</h1>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="mensaje">Cassy, ¿Quieres ser mi San Valentín? 💘</div>
+        <div id="mensaje">🎉 ¿Quieres ser mi San Valentín? 💘</div>
         <div class="controls">
             <button class="control-btn" id="left">⬅️</button>
             <button class="control-btn" id="up">⬆️</button>
@@ -78,6 +81,7 @@
     </div>
 
     <script>
+        // Animación del corazón en la pantalla de inicio
         const introCanvas = document.getElementById("introCanvas");
         const introCtx = introCanvas.getContext("2d");
         let heartSize = 80;
@@ -174,6 +178,7 @@
             });
         }
 
+        // Movimientos con las teclas
         document.addEventListener("keydown", (event) => {
             if (event.key === "ArrowUp") player.y -= 10;
             if (event.key === "ArrowDown") player.y += 10;
@@ -182,19 +187,22 @@
             updateGame();
         });
 
-        // Mover el botón "No" cuando el cursor pase sobre él
-        const noButton = document.getElementById("no");
-        noButton.addEventListener("mouseenter", () => {
-            const randomX = Math.random() * (window.innerWidth - noButton.offsetWidth);
-            const randomY = Math.random() * (window.innerHeight - noButton.offsetHeight);
-            noButton.style.position = "absolute";
-            noButton.style.left = `${randomX}px`;
-            noButton.style.top = `${randomY}px`;
+        // Controles táctiles para móviles
+        document.getElementById("left").addEventListener("click", () => {
+            player.x -= 10;
+            updateGame();
         });
-
-        // Redirigir a mensaje.html cuando se haga clic en el botón "Sí"
-        document.getElementById("yes").addEventListener("click", () => {
-            window.location.href = "mensaje.html";  // Redirige a mensaje.html
+        document.getElementById("right").addEventListener("click", () => {
+            player.x += 10;
+            updateGame();
+        });
+        document.getElementById("up").addEventListener("click", () => {
+            player.y -= 10;
+            updateGame();
+        });
+        document.getElementById("down").addEventListener("click", () => {
+            player.y += 10;
+            updateGame();
         });
 
         updateGame();
