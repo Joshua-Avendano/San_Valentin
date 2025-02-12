@@ -10,17 +10,14 @@
             background-color: black;
             font-family: Arial, sans-serif;
             color: white;
-            margin: 0;
-            padding: 0;
             overflow: hidden;
         }
-        canvas {
-            width: 100%;
-            height: auto;
-        }
-        #gameContainer {
+        #introCanvas, #gameCanvas {
             display: block;
             margin: auto;
+        }
+        #gameContainer {
+            display: none;
         }
         #mensaje {
             display: none;
@@ -35,10 +32,10 @@
             margin-top: 20px;
         }
         .control-btn {
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             margin: 5px;
-            font-size: 30px;
+            font-size: 20px;
             border: none;
             background-color: #ff4d6d;
             color: white;
@@ -67,7 +64,7 @@
     <div id="gameContainer">
         <h1>¡Recolecta 5 corazones para desbloquear el mensaje! 💖</h1>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="mensaje">🎉 ¿Quieres ser mi San Valentín? 💘</div>
+        <div id="mensaje">Cassy, ¿Quieres ser mi San Valentín? 💘</div>
         <div class="controls">
             <button class="control-btn" id="left">⬅️</button>
             <button class="control-btn" id="up">⬆️</button>
@@ -185,28 +182,6 @@
             updateGame();
         });
 
-        // Agregar eventos táctiles para mover al jugador
-        canvas.addEventListener("touchstart", function(e) {
-            const touch = e.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-            
-            // Mover al jugador basado en la posición táctil
-            if (touchX < canvas.width / 2) {
-                player.x -= 10; // Mover hacia la izquierda
-            } else {
-                player.x += 10; // Mover hacia la derecha
-            }
-
-            if (touchY < canvas.height / 2) {
-                player.y -= 10; // Mover hacia arriba
-            } else {
-                player.y += 10; // Mover hacia abajo
-            }
-
-            updateGame();
-        });
-
         // Mover el botón "No" cuando el cursor pase sobre él
         const noButton = document.getElementById("no");
         noButton.addEventListener("mouseenter", () => {
@@ -215,6 +190,11 @@
             noButton.style.position = "absolute";
             noButton.style.left = `${randomX}px`;
             noButton.style.top = `${randomY}px`;
+        });
+
+        // Redirigir a mensaje.html cuando se haga clic en el botón "Sí"
+        document.getElementById("yes").addEventListener("click", () => {
+            window.location.href = "mensaje.html";  // Redirige a mensaje.html
         });
 
         updateGame();
