@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Quieres ser mi San Valentín?</title>
+    <title>Te amo con todo mi corazón</title>
     <style>
         body {
             text-align: center;
@@ -45,5 +45,14 @@
         <div id="fecha">Cassy, gracias por permitirme ser parte de tu vida, eres la personita más especial del mundo, y todo lo que podría pedir. <br> Te veo el 23, amor. 💌</div>
         <img id="osoImagen" src="osito.png" alt="Oso de San Valentín" width="300" />
     </div>
+
+    <script>
+        // Redirigir a SanValentin.html cuando se recargue la página
+        window.onload = function() {
+            if (performance.navigation.type === 1) {  // Si la página se recarga
+                window.location.href = "SanValentin.html";
+            }
+        };
+    </script>
 </body>
 </html>
