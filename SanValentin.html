@@ -10,11 +10,9 @@
             background-color: black;
             font-family: Arial, sans-serif;
             color: white;
-            margin: 0;
-            padding: 0;
             overflow: hidden;
         }
-        canvas {
+        #introCanvas, #gameCanvas {
             display: block;
             margin: auto;
         }
@@ -23,27 +21,26 @@
         }
         #mensaje {
             display: none;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: #ff4d6d;
             margin-top: 20px;
         }
         .controls {
             display: flex;
-            justify-content: space-around;
-            width: 100%;
+            justify-content: center;
             margin-top: 20px;
         }
         .control-btn {
-            width: 60px;
-            height: 60px;
-            font-size: 25px;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 20px;
             border: none;
             background-color: #ff4d6d;
             color: white;
             border-radius: 50%;
             cursor: pointer;
-            margin: 10px;
         }
         #yesNoButtons {
             display: none;
@@ -52,34 +49,12 @@
         .yesNo-btn {
             background-color: #ff4d6d;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             border: none;
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
             margin: 5px;
-        }
-
-        /* Estilo para la animación de la intro */
-        #introCanvas {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-        }
-
-        /* Estilo adaptativo para el mensaje */
-        @media (max-width: 600px) {
-            #mensaje {
-                font-size: 18px;
-            }
-            .control-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-            .yesNo-btn {
-                font-size: 16px;
-            }
         }
     </style>
 </head>
