@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+        #introCanvas, #gameCanvas {
+            display: block;
+            margin: auto;
+        }
+        #gameContainer {
+            display: none;
+        }
+        #mensaje {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff4d6d;
+            margin-top: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 20px;
+            border: none;
+            background-color: #ff4d6d;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #yesNoButtons {
+            display: none;
+            margin-top: 20px;
+        }
+        .yesNo-btn {
+            background-color: #ff4d6d;
+            color: white;
+            font-size: 20px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="introCanvas" width="400" height="400"></canvas>
+    
+    <div id="gameContainer">
+        <h1>¡Recolecta 5 corazones para desbloquear el mensaje! 💖</h1>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="mensaje">Cassy, ¿Quieres ser mi San Valentín? 💘</div>
+        <div class="controls">
+            <button class="control-btn" id="left">⬅️</button>
+            <button class="control-btn" id="up">⬆️</button>
+            <button class="control-btn" id="down">⬇️</button>
+            <button class="control-btn" id="right">➡️</button>
+        </div>
+        <div id="yesNoButtons">
+            <button class="yesNo-btn" id="yes">Sí</button>
+            <button class="yesNo-btn" id="no">No</button>
+        </div>
+    </div>
+
+    <script>
+        const introCanvas = document.getElementById("introCanvas");
+        const introCtx = introCanvas.getContext("2d");
+        let heartSize = 80;
+        let growing = true;
+
+        function drawHeart(ctx, x, y, size) {
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.bezierCurveTo(x, y - size * 0.3, x - size * 0.5, y - size * 0.3, x - size * 0.5, y + size * 0.2);
+            ctx.bezierCurveTo(x - size * 0.5, y + size * 0.5, x, y + size * 0.8, x, y + size);
+            ctx.bezierCurveTo(x, y + size * 0.8, x + size * 0.5, y + size * 0.5, x + size * 0.5, y + size * 0.2);
+            ctx.bezierCurveTo(x + size * 0.5, y - size * 0.3, x, y - size * 0.3, x, y);
+            ctx.fill();
+        }
+
+        function animateHeart() {
+            setInterval(() => {
+                introCtx.clearRect(0, 0, introCanvas.width, introCanvas.height);
+                if (growing) {
+                    heartSize += 5;
+                    if (heartSize >= 110) growing = false;
+                } else {
+                    heartSize -= 5;
+                    if (heartSize <= 80) growing = true;
+                }
+                drawHeart(introCtx, 200, 150, heartSize);
+            }, 200);
+        }
+
+        drawHeart(introCtx, 200, 150, heartSize);
+        animateHeart();
+
+        setTimeout(() => {
+            document.getElementById("introCanvas").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+        }, 3000);
+
+        // Código del juego
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 50, y: 50, size: 20 };
+        let hearts = [];
+        let collected = 0;
+
+        function createHeart() {
+            return {
+                x: Math.random() * (canvas.width - 20),
+                y: Math.random() * (canvas.height - 20),
+                size: 15
+            };
+        }
+
+        for (let i = 0; i < 5; i++) {
+            hearts.push(createHeart());
+        }
+
+        function drawPlayer() {
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawHearts() {
+            hearts.forEach(heart => {
+                drawHeart(ctx, heart.x, heart.y, heart.size);
+            });
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawHearts();
+            checkCollisions();
+        }
+
+        function checkCollisions() {
+            hearts = hearts.filter(heart => {
+                let dx = player.x - heart.x;
+                let dy = player.y - heart.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < player.size + heart.size) {
+                    collected++;
+                    if (collected === 5) {
+                        document.getElementById("mensaje").style.display = "block";
+                        document.querySelector(".controls").style.display = "none";  // Ocultar los botones
+                        document.getElementById("yesNoButtons").style.display = "block";  // Mostrar los botones de "Sí" y "No"
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowUp") player.y -= 10;
+            if (event.key === "ArrowDown") player.y += 10;
+            if (event.key === "ArrowLeft") player.x -= 10;
+            if (event.key === "ArrowRight") player.x += 10;
+            updateGame();
+        });
+
+        // Mover el botón "No" cuando el cursor pase sobre él
+        const noButton = document.getElementById("no");
+        noButton.addEventListener("mouseenter", () => {
+            const randomX = Math.random() * (window.innerWidth - noButton.offsetWidth);
+            const randomY = Math.random() * (window.innerHeight - noButton.offsetHeight);
+            noButton.style.position = "absolute";
+            noButton.style.left = `${randomX}px`;
+            noButton.style.top = `${randomY}px`;
+        });
+
+        // Redirigir a mensaje.html cuando se haga clic en el botón "Sí"
+        document.getElementById("yes").addEventListener("click", () => {
+            window.location.href = "mensaje.html";  // Redirige a mensaje.html
+        });
+
+        updateGame();
+    </script>
+</body>
+</html>
